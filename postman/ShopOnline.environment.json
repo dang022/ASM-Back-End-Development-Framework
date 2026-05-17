@@ -1,0 +1,11 @@
+{
+  "id": "shoponline-env-1",
+  "name": "ShopOnline - Local",
+  "values": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "enabled": true },
+    { "key": "token", "value": "", "enabled": true },
+    { "key": "productId", "value": "", "enabled": true }
+  ],
+  "timestamp": 0,
+  "synced": false
+}
