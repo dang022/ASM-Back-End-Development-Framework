@@ -6,6 +6,15 @@ const options = {
     info: {
       title: 'ShopOnline API',
       version: '1.0.0'
+    },
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
     }
   },
   apis: ['./src/routes/*.js', './src/controllers/*.js']
