@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../models/User.js';
+import { JWT_SECRET } from '../config/jwt.js';
 dotenv.config();
 
 export const auth = async (req, res, next) => {
@@ -8,7 +9,7 @@ export const auth = async (req, res, next) => {
   if (!authHeader) return res.status(401).json({ status: 401, message: 'No token' });
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     req.user = await User.findById(decoded.id).select('-password');
     next();
   } catch (err) {

@@ -4,9 +4,10 @@ import Product from '../../models/Product.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/jwt.js';
 dotenv.config();
 
-const signToken = (user) => jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
+const signToken = (user) => jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
 export const resolvers = {
   Query: {

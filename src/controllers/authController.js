@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { z } from 'zod';
+import { JWT_EXPIRES_IN, JWT_SECRET } from '../config/jwt.js';
 dotenv.config();
 
 const registerSchema = z.object({ name: z.string().min(1), email: z.string().email(), password: z.string().min(6) });
@@ -19,7 +20,7 @@ export const register = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-function signToken(user) { return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }); }
+function signToken(user) { return jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN }); }
 
 export const login = async (req, res, next) => {
   try {

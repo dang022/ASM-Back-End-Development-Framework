@@ -19,13 +19,13 @@ const router = express.Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: user@example.com
+ *                 example: admin@example.com
  *               password:
  *                 type: string
  *                 example: password123
  *               name:
  *                 type: string
- *                 example: John Doe
+ *                 example: Admin
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -50,7 +50,7 @@ router.post('/register', register);
  *             properties:
  *               email:
  *                 type: string
- *                 example: user@example.com
+ *                 example: admin@example.com
  *               password:
  *                 type: string
  *                 example: password123
