@@ -9,13 +9,27 @@ dotenv.config();
 
 const signToken = (user) => jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
+const requireAuth = (req) => {
+  if (!req?.user) throw new Error('Unauthorized');
+  return req.user;
+};
+
+const requireAdmin = (req) => {
+  const user = requireAuth(req);
+  if (user.role !== 'admin') throw new Error('Admin only');
+  return user;
+};
+
 export const resolvers = {
   Query: {
     me: async (_, __, { req }) => {
-      if (!req.user) return null;
+      requireAuth(req);
       return await User.findById(req.user._id).select('-password');
     },
-    users: async () => await User.find().select('-password'),
+    users: async (_, __, { req }) => {
+      requireAdmin(req);
+      return await User.find().select('-password');
+    },
     categories: async () => await Category.find(),
     products: async (_, { filter }) => {
       const q = {};
@@ -38,7 +52,13 @@ export const resolvers = {
       if (!match) throw new Error('Invalid credentials');
       return { token: signToken(user) };
     },
-    createCategory: async (_, { name, description }) => await Category.create({ name, description }),
-    createProduct: async (_, args) => await Product.create(args)
+    createCategory: async (_, { name, description }, { req }) => {
+      requireAdmin(req);
+      return await Category.create({ name, description });
+    },
+    createProduct: async (_, args, { req }) => {
+      requireAdmin(req);
+      return await Product.create(args);
+    }
   }
 };

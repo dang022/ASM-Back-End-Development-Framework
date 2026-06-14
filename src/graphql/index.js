@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { JWT_SECRET } from '../config/jwt.js';
 import User from '../models/User.js';
+import { extractToken } from '../utils/jwt.js';
 import { userType, userQuery, userMutation } from './schemas/user.js';
 import { categoryType } from './schemas/category.js';
 import { productType } from './schemas/product.js';
@@ -137,9 +138,10 @@ export async function mountGraphql(app) {
       const auth = req.headers.authorization;
       if (auth) {
         try {
-          const token = auth.split(' ')[1];
+          const token = extractToken(auth);
           const decoded = jwt.verify(token, JWT_SECRET);
           const user = await User.findById(decoded.id).select('-password');
+          req.user = user;
           return { req, user };
         } catch (e) { return { req }; }
       }

@@ -47,6 +47,93 @@ npm run dev
 - Swagger: http://localhost:5000/api-docs
 - GraphQL: http://localhost:5000/graphql
 
+## GraphQL Test Commands
+
+Use the GraphQL tester at `/graphql` in this order:
+
+1. Login to get a token
+
+```graphql
+mutation {
+	login(email: "admin@example.com", password: "password123") {
+		token
+	}
+}
+```
+
+2. Copy the token from the response and paste it into `Authorization token`.
+	 You can paste it as raw token or with `Bearer ` in front.
+
+3. Test a public query without token
+
+```graphql
+query {
+	products {
+		id
+		name
+		price
+		stock
+		category {
+			id
+			name
+		}
+	}
+}
+```
+
+4. Test a protected query with token
+
+```graphql
+query {
+	me {
+		id
+		name
+		email
+		role
+	}
+}
+```
+
+5. Test admin-only queries and mutations with token
+
+```graphql
+query {
+	users {
+		id
+		name
+		email
+		role
+	}
+}
+```
+
+```graphql
+mutation {
+	createCategory(name: "Books", description: "Books category") {
+		id
+		name
+		description
+	}
+}
+```
+
+```graphql
+mutation {
+	createProduct(
+		name: "Laptop"
+		price: 1500
+		description: "Work laptop"
+		stock: 10
+		category: "665000000000000000000001"
+	) {
+		id
+		name
+		price
+		stock
+	}
+}
+```
+
 ## Test Accounts
 
 Use these accounts after running the seed script:

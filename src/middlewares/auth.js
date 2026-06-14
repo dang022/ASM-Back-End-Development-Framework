@@ -2,12 +2,13 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../models/User.js';
 import { JWT_SECRET } from '../config/jwt.js';
+import { extractToken } from '../utils/jwt.js';
 dotenv.config();
 
 export const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ status: 401, message: 'No token' });
-  const token = authHeader.split(' ')[1];
+  const token = extractToken(authHeader);
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = await User.findById(decoded.id).select('-password');
